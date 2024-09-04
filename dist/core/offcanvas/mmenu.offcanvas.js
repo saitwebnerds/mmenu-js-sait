@@ -39,6 +39,7 @@ export default function () {
     }
     //  Prepend the menu to the <body>.
     this.bind('initMenu:before', () => {
+        console.log("Starting menu...");
         this.node.wrpr = document.querySelector(configs.menu.insertSelector);
         this.node.wrpr[configs.menu.insertMethod](this.node.menu);
     });
@@ -126,7 +127,6 @@ Mmenu.prototype.open = function () {
  * Close the menu.
  */
 Mmenu.prototype.close = function () {
-    var _a;
     if (!this.node.menu.matches('.mm-menu--opened')) {
         return;
     }
@@ -139,7 +139,7 @@ Mmenu.prototype.close = function () {
     Mmenu.node.page.removeAttribute('inert');
     /** Element to focus. */
     const focus = this.node.open || document.querySelector(`[href="#${this.node.menu.id}"]`) || null;
-    (_a = focus) === null || _a === void 0 ? void 0 : _a.focus();
+    focus === null || focus === void 0 ? void 0 : focus.focus();
     // Prevent html/body from scrolling due to focus.
     document.body.scrollLeft = 0;
     document.documentElement.scrollLeft = 0;

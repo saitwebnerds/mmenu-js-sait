@@ -1,17 +1,15 @@
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _panelObserver, _listviewObserver, _listitemObserver;
+var _Mmenu_panelObserver, _Mmenu_listviewObserver, _Mmenu_listitemObserver;
 import OPTIONS from './options';
 import CONFIGS from './configs';
 import translate from './translations';
@@ -24,7 +22,7 @@ translate();
 /**
  * Class for a mobile menu.
  */
-export default class Mmenu {
+class Mmenu {
     /**
      * Create a mobile menu.
      * @param {HTMLElement|string} 	menu		The menu node.
@@ -33,11 +31,11 @@ export default class Mmenu {
      */
     constructor(menu, options, configs) {
         /** MutationObserver for adding a listview to a panel. */
-        _panelObserver.set(this, void 0);
+        _Mmenu_panelObserver.set(this, void 0);
         /** MutationObserver for adding a listitem to a listview. */
-        _listviewObserver.set(this, void 0);
+        _Mmenu_listviewObserver.set(this, void 0);
         /** MutationObserver for adding a listview to a listitem. */
-        _listitemObserver.set(this, void 0);
+        _Mmenu_listitemObserver.set(this, void 0);
         //	Extend options and configuration from defaults.
         this.opts = extend(options, OPTIONS);
         this.conf = extend(configs, CONFIGS);
@@ -247,7 +245,7 @@ export default class Mmenu {
      * Create the observers.
      */
     _initObservers() {
-        __classPrivateFieldSet(this, _panelObserver, new MutationObserver((mutationsList) => {
+        __classPrivateFieldSet(this, _Mmenu_panelObserver, new MutationObserver((mutationsList) => {
             mutationsList.forEach((mutation) => {
                 mutation.addedNodes.forEach((listview) => {
                     if (listview.matches(this.conf.panelNodetype.join(', '))) {
@@ -255,15 +253,15 @@ export default class Mmenu {
                     }
                 });
             });
-        }));
-        __classPrivateFieldSet(this, _listviewObserver, new MutationObserver((mutationsList) => {
+        }), "f");
+        __classPrivateFieldSet(this, _Mmenu_listviewObserver, new MutationObserver((mutationsList) => {
             mutationsList.forEach((mutation) => {
                 mutation.addedNodes.forEach((listitem) => {
                     this._initListitem(listitem);
                 });
             });
-        }));
-        __classPrivateFieldSet(this, _listitemObserver, new MutationObserver((mutationsList) => {
+        }), "f");
+        __classPrivateFieldSet(this, _Mmenu_listitemObserver, new MutationObserver((mutationsList) => {
             mutationsList.forEach((mutation) => {
                 mutation.addedNodes.forEach((subpanel) => {
                     if (subpanel === null || subpanel === void 0 ? void 0 : subpanel.matches(this.conf.panelNodetype.join(', '))) {
@@ -271,7 +269,7 @@ export default class Mmenu {
                     }
                 });
             });
-        }));
+        }), "f");
     }
     /**
      * Create the API.
@@ -426,7 +424,7 @@ export default class Mmenu {
             this._initListview(listview);
         });
         // Observe the panel for added listviews.
-        __classPrivateFieldGet(this, _panelObserver).observe(panel, {
+        __classPrivateFieldGet(this, _Mmenu_panelObserver, "f").observe(panel, {
             childList: true,
         });
         //	Invoke "after" hook.
@@ -538,7 +536,7 @@ export default class Mmenu {
             this._initListitem(listitem);
         });
         // Observe the listview for added listitems.
-        __classPrivateFieldGet(this, _listviewObserver).observe(listview, {
+        __classPrivateFieldGet(this, _Mmenu_listviewObserver, "f").observe(listview, {
             childList: true,
         });
         //	Invoke "after" hook.
@@ -572,7 +570,7 @@ export default class Mmenu {
             this._initSubPanel(subpanel);
         });
         // Observe the listitem for added listviews.
-        __classPrivateFieldGet(this, _listitemObserver).observe(listitem, {
+        __classPrivateFieldGet(this, _Mmenu_listitemObserver, "f").observe(listitem, {
             childList: true,
         });
         //	Invoke "after" hook.
@@ -667,10 +665,11 @@ export default class Mmenu {
         }
     }
 }
-_panelObserver = new WeakMap(), _listviewObserver = new WeakMap(), _listitemObserver = new WeakMap();
+_Mmenu_panelObserver = new WeakMap(), _Mmenu_listviewObserver = new WeakMap(), _Mmenu_listitemObserver = new WeakMap();
 /**	Available add-ons for the plugin. */
 Mmenu.addons = {};
 /**	Globally used HTML elements. */
 Mmenu.node = {};
 /** Globally used v. */
 Mmenu.vars = {};
+export default Mmenu;
