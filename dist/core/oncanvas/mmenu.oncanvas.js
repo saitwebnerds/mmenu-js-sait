@@ -618,9 +618,6 @@ class Mmenu {
                     listitem.insertBefore(button, text.nextElementSibling);
                 }
             });
-            button.setAttribute('aria-label', this.i18n(this.conf.screenReader[listitem.matches('.mm-listitem--vertical')
-                ? 'toggleSubmenu'
-                : 'openSubmenu']));
         }
         button.href = `#${subpanel.id}`;
         this._initPanel(subpanel);

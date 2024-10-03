@@ -39,7 +39,6 @@ export default function () {
     }
     //  Prepend the menu to the <body>.
     this.bind('initMenu:before', () => {
-        console.log("Starting menu...");
         this.node.wrpr = document.querySelector(configs.menu.insertSelector);
         this.node.wrpr[configs.menu.insertMethod](this.node.menu);
     });

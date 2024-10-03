@@ -844,13 +844,7 @@ export default class Mmenu {
                 }
             });
             
-            button.setAttribute('aria-label', this.i18n(
-                this.conf.screenReader[
-                    listitem.matches('.mm-listitem--vertical')
-                        ? 'toggleSubmenu'
-                        : 'openSubmenu'
-                ]
-            ));
+            
         }
 
         button.href = `#${subpanel.id}`;
